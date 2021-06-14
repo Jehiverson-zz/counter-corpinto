@@ -6,8 +6,18 @@ const Counter = require('../models/CounterPeople');
 
 router.post("/counter", async(req, res) => {
     console.log("LLego",req.body);
+    console.log("++++++++++++++++++++++++++++++++++++++");
     if (req.body.data.measurements) {
         console.log("Paso",req.body.data);
+        
+        req.body.data.measurements.map((measurement) =>{
+            console.log("measurement:",measurement.items);
+            measurement.items.map(item =>{
+                console.log("items:",item.direction,"-",item.count);
+            })
+        });
+
+
        /*  const createCounter = Counter({
             name: req.body.name,
             status: req.body.status,

@@ -19,11 +19,11 @@ router.post("/counter", async(req, res) => {
             store: ""
         };
         createCounter.store = req.body.sensor.name;
-        req.body.data.measurements.map((measurement) =>{
+        req.body.data.measurements.map(async(measurement) =>{
             console.log("measurement:",measurement.items);
             createCounter.to = req.body.data.to;
             createCounter.from = req.body.data.from;
-            measurement.items.map(item =>{
+            measurement.items.map(async(item) =>{
                 if(item.direction === 'in'){
                     createCounter.in = item.count;
                 }else{

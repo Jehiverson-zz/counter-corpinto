@@ -4,15 +4,13 @@ const mongoose =  require('mongoose');
 const { Schema } = mongoose;
 const path = require('path');
 const fileSchema = new Schema ({
-
-    upc: {type: String },
-    alu: {type: String },
-    size: {type: String },
-    bill: {type: String },
-    idTicket: {type: Schema.ObjectId, ref:'ticket_tras_system'},
-    timestamp:{ type: Date, default: Date.now },
-    timestampend:{ type: Date }
-
+    to: {type: String },
+    from: {type: String },
+    in: {type: Number },
+    adultIn: {type: Number },
+    out: {type: Number },
+    adultOut: {type: Number },
+    store: {type: String}
 });
 
 fileSchema.virtual('uniqueId')

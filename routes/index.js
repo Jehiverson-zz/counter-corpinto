@@ -20,7 +20,7 @@ router.post("/counter", async(req, res) => {
         };
         createCounter.store = req.body.sensor.name;
         req.body.data.measurements.map(async(measurement) =>{
-            console.log("measurement:",measurement.items);
+            console.log("measurement1:",measurement.items);
             createCounter.to = req.body.data.to;
             createCounter.from = req.body.data.from;
             measurement.items.map(async(item) =>{

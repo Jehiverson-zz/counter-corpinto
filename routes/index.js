@@ -5,8 +5,9 @@ const router = express.Router();
 const Counter = require('../models/CounterPeople');
 
 router.post("/counter", async(req, res) => {
+    console.log("LLego",req.body);
     if (req.body.data.measurements) {
-        
+        console.log("Paso",req.body.data);
        /*  const createCounter = Counter({
             name: req.body.name,
             status: req.body.status,

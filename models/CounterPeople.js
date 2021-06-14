@@ -1,15 +1,18 @@
+'use strict'
+
 const mongoose =  require('mongoose');
 const { Schema } = mongoose;
 const path = require('path');
 const fileSchema = new Schema ({
-    upc: { type: String },
-    alu: { type: String },
-    siz: { type: String ,default:0 },
-    price: { type: String,default:0 },
-    damage:{ type:String,default:0 },
-    store_created: { type: String },
-    image: { type: String },
+
+    upc: {type: String },
+    alu: {type: String },
+    size: {type: String },
+    bill: {type: String },
+    idTicket: {type: Schema.ObjectId, ref:'ticket_tras_system'},
     timestamp:{ type: Date, default: Date.now },
+    timestampend:{ type: Date }
+
 });
 
 fileSchema.virtual('uniqueId')
@@ -17,4 +20,4 @@ fileSchema.virtual('uniqueId')
         return this.filename.replace(path.extname(this.filename), '')
     });
 
-module.exports = mongoose.model('damaged_merchandise',fileSchema)
+module.exports = mongoose.model('counterPeople',fileSchema)

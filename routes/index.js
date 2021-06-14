@@ -16,7 +16,7 @@ router.post("/counter", async(req, res) => {
         });
         await creatSubsidiaria.save();
         return res.status(200).json({ error: 0, message: "Subsidiaria Creada" }); */
-
+        console.log("--------------------------------------");
     } else {
         console.log("measurements vacio");
     }

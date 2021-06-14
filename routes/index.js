@@ -21,8 +21,13 @@ router.post("/counter", async(req, res) => {
         createCounter.store = req.body.sensor.name;
         req.body.data.measurements.map(async(measurement) =>{
             console.log("measurement1:",measurement.items);
-            createCounter.to = req.body.data.to;
-            createCounter.from = req.body.data.from;
+
+            var toConvert = new Date(req.body.data.to);
+            createCounter.to = toConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
+
+            var fromConvert = new Date(req.body.data.from);
+            createCounter.from = fromConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
+            
             measurement.items.map(async(item) =>{
                 if(item.direction === 'in'){
                     createCounter.in = item.count;
@@ -52,6 +57,12 @@ router.post("/counter", async(req, res) => {
         console.log("measurements vacio");
     }
 
+    return res.status(200).json({ message: "Hello World!" });
+});
+
+router.post("/data-counter", async(req, res) => {
+    console.log("LLego",req.body);
+  
     return res.status(200).json({ message: "Hello World!" });
 });
 module.exports = router;

@@ -4,8 +4,8 @@ const mongoose =  require('mongoose');
 const { Schema } = mongoose;
 const path = require('path');
 const fileSchema = new Schema ({
-    to: {type: String },
-    from: {type: String },
+    to: {type: Date },
+    from: {type: Date },
     in: {type: Number },
     adultIn: {type: Number },
     out: {type: Number },

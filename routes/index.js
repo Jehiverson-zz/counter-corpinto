@@ -27,7 +27,7 @@ router.post("/counter", async(req, res) => {
 
             var fromConvert = new Date(req.body.data.from);
             createCounter.from = fromConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
-            
+
             measurement.items.map(async(item) =>{
                 if(item.direction === 'in'){
                     createCounter.in = item.count;
@@ -35,7 +35,6 @@ router.post("/counter", async(req, res) => {
                     createCounter.out = item.count;
                 }
                 console.log("items:",item.direction,"-",item.count);
-                createCounter.from = req.body.data.from;
                 console.log("--------------------------------------");
             });
 

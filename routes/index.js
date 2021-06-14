@@ -5,7 +5,7 @@ const router = express.Router();
 const Counter = require('../models/CounterPeople');
 
 router.post("/counter", async(req, res) => {
-    //console.log("LLego",req.body);
+    console.log("LLego",req.body);
     //console.log("++++++++++++++++++++++++++++++++++++++");
     
     if (req.body.data.measurements) {

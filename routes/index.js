@@ -69,10 +69,10 @@ router.get("/data-counter", async(req, res) => {
         };
 
         var fromConvert = new Date(counters.from);
-        showCounter.horaInicio = fromConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
+        showCounter.horaInicio = fromConvert.toLocaleString('es-US', { timeZone: 'America/Guatemala' });
 
         var toConvert = new Date(counters.to);
-        showCounter.horaFinal = toConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
+        showCounter.horaFinal = toConvert.toLocaleString('es-US', { timeZone: 'America/Guatemala' });
 
         showCounter.entrada = counters.in;
         showCounter.salida = counters.out;

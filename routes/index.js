@@ -56,29 +56,31 @@ router.get("/data-counter", async(req, res) => {
     
     let showDataCounter = await Counter.find();
 
-    const showCounter = {
-        to: "",
-        from: "",
-        in: 0,
-        out: 0,
-        store: ""
-    };
+    
     const counterPush = [];
     showDataCounter.map(counters => {
 
-        var toConvert = new Date(req.body.data.to);
-         createCounter.to = toConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
+        const showCounter = {
+            horaInicio: "",
+            horaFinal: "",
+            entrada: 0,
+            salida: 0,
+            tienda: ""
+        };
 
         var fromConvert = new Date(counters.from);
-         createCounter.from = fromConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
+        showCounter.horaInicio = fromConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
 
-         createCounter.in = counters.in;
-         createCounter.out = counters.out;
-         createCounter.store = counters.store;
+        var toConvert = new Date(counters.to);
+        showCounter.horaFinal = toConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
+
+        showCounter.entrada = counters.in;
+        showCounter.salida = counters.out;
+        showCounter.tienda = counters.store;
 
         counterPush.push(showCounter);
     });
-    
+
     return res.status(200).json(counterPush);
 });
 module.exports = router;

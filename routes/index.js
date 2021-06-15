@@ -44,14 +44,6 @@ router.post("/counter", async(req, res) => {
             await insertData.save();
 
         });
-
-
-         
-/* 
-        
-        
-        return res.status(200).json({ error: 0, message: "Subsidiaria Creada" }); 
-         */
     } else {
         console.log("measurements vacio");
     }
@@ -59,9 +51,8 @@ router.post("/counter", async(req, res) => {
     return res.status(200).json({ message: "Hello World!" });
 });
 
-router.post("/data-counter", async(req, res) => {
-    console.log("LLego",req.body);
-  
-    return res.status(200).json({ message: "Hello World!" });
+router.get("/data-counter", async(req, res) => {
+    let showDataCounter = await Counter.find();
+    return res.status(200).json({ showDataCounter });
 });
 module.exports = router;

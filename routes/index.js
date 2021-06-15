@@ -18,6 +18,7 @@ router.post("/counter", async(req, res) => {
             out: 0,
             store: ""
         };
+        
         createCounter.store = req.body.sensor.name;
         req.body.data.measurements.map(async(measurement) =>{
             console.log("measurement1:",measurement.items);
@@ -52,7 +53,32 @@ router.post("/counter", async(req, res) => {
 });
 
 router.get("/data-counter", async(req, res) => {
+    
     let showDataCounter = await Counter.find();
-    return res.status(200).json({ showDataCounter });
+
+    const showCounter = {
+        to: "",
+        from: "",
+        in: 0,
+        out: 0,
+        store: ""
+    };
+    const counterPush = [];
+    showDataCounter.map(counters => {
+
+        var toConvert = new Date(req.body.data.to);
+         createCounter.to = toConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
+
+        var fromConvert = new Date(counters.from);
+         createCounter.from = fromConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
+
+         createCounter.in = counters.in;
+         createCounter.out = counters.out;
+         createCounter.store = counters.store;
+
+        counterPush.push(showCounter);
+    });
+    
+    return res.status(200).json(counterPush);
 });
 module.exports = router;

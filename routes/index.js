@@ -5,12 +5,8 @@ const router = express.Router();
 const Counter = require('../models/CounterPeople');
 
 router.post("/counter", async(req, res) => {
-    console.log("LLego",req.body);
-    //console.log("++++++++++++++++++++++++++++++++++++++");
     
     if (req.body.data.measurements) {
-        console.log("Paso",req.body.data);
-   
         const createCounter = {
             to: "",
             from: "",
@@ -21,8 +17,7 @@ router.post("/counter", async(req, res) => {
         
         createCounter.store = req.body.sensor.name;
         req.body.data.measurements.map(async(measurement) =>{
-            console.log("measurement1:",measurement.items);
-
+    
             var toConvert = new Date(req.body.data.to);
             createCounter.to = toConvert.toLocaleString('en-US', { timeZone: 'America/Guatemala' });
 
@@ -35,12 +30,8 @@ router.post("/counter", async(req, res) => {
                 }else{
                     createCounter.out = item.count;
                 }
-                console.log("items:",item.direction,"-",item.count);
-                console.log("--------------------------------------");
+               
             });
-
-            console.log("Datos:", createCounter);
-
             const insertData = Counter(createCounter);
             await insertData.save();
 

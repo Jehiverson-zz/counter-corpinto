@@ -45,9 +45,7 @@ router.post("/counter", async(req, res) => {
 
 router.get("/data-counter", async(req, res) => {
     
-    let showDataCounter = await Counter.find();
-
-    
+    let showDataCounter = await Counter.find({},{to: 1, from: 1, in: 1, out: 1, store: 1 });
     const counterPush = [];
     showDataCounter.map(counters => {
 

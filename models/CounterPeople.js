@@ -1,5 +1,3 @@
-'use strict'
-
 const mongoose =  require('mongoose');
 const { Schema } = mongoose;
 const path = require('path');
@@ -18,4 +16,4 @@ fileSchema.virtual('uniqueId')
         return this.filename.replace(path.extname(this.filename), '')
     });
 
-module.exports = mongoose.model('counterPeople',fileSchema)
+module.exports = mongoose.model('counterPeoples',fileSchema)

@@ -1,4 +1,5 @@
 const express = require('express');
+const moment = require('moment')
 const router = express.Router();
 
 //Models
@@ -81,7 +82,7 @@ router.get("/data-counter", async(req, res) => {
 
 router.get("/data-counter/:dateInit/:dateEnd", async(req, res) => {
     const { dateInit, dateEnd } = req.params;
-    
+    if(moment(dateInit, 'YYYY-MM-DD',true).isValid() && moment(dateEnd, 'YYYY-MM-DD',true).isValid()){
     if(new Date(dateInit) <= new Date(dateEnd)){
     let showDataCounter = await Counter.find({ 
             $or:[{'in':{$gt: 0}}, {'out':{$gt: 0}}], 
@@ -115,7 +116,10 @@ router.get("/data-counter/:dateInit/:dateEnd", async(req, res) => {
     return res.status(200).json(counterPush);
 
     }else{
-        return res.status(400).json({ message: "Error, fecha en formato incorrecto" });
+        return res.status(400).json({ message: "Error, fecha mal ingresada" });
+    }
+    }else{
+        return res.status(400).json({ message: "Error, fechas en formato incorrecto" });
     }
 });
 

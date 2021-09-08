@@ -17,6 +17,7 @@ router.post("/counter", async(req, res) => {
         };
         
         createCounter.store = req.body.sensor.name;
+        console.log(req.body.sensor.name,": Tienda que llego");
         req.body.data.measurements.map(async(measurement) =>{
     
             var toConvert = new Date(req.body.data.to);
@@ -33,9 +34,13 @@ router.post("/counter", async(req, res) => {
                 }
                
             });
+            console.log(createCounter);
             const insertData = Counter(createCounter);
             if(createCounter.in > 0 || createCounter.out > 0){
                 await insertData.save();
+                console.log("Se guardo");
+            }else{
+                console.log("No se guardo");
             }
         });
 

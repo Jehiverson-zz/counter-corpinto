@@ -17,6 +17,7 @@ router.post("/counter", async(req, res) => {
         };
         
         createCounter.store = req.body.sensor.name;
+        console.log(req.body);
         console.log(req.body.sensor.name,": Tienda que llego");
         req.body.data.measurements.map(async(measurement) =>{
     

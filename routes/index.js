@@ -4,7 +4,7 @@ const router = express.Router();
 
 //Models
 const Counter = require('../models/CounterPeople');
-const CounterUnion = require('../models/counterUnion');
+const CounterUnion = require('../models/CounterUnion');
 
 router.post("/counter", async(req, res) => {
     

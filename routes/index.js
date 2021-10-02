@@ -4,6 +4,7 @@ const router = express.Router();
 
 //Models
 const Counter = require('../models/CounterPeople');
+const CounterUnion = require('../models/counterUnion');
 
 router.post("/counter", async(req, res) => {
     
@@ -92,7 +93,7 @@ router.get("/data-counter/:dateInit/:dateEnd", async(req, res) => {
     if(new Date(dateInit) <= new Date(dateEnd)){
     let showDataCounter = await Counter.find({ 
             $or:[{'in':{$gt: 0}}, {'out':{$gt: 0}}], 
-            from: { $gte: `${dateInit}T08:00:00.000Z`, $lt: `${dateEnd}T24:00:00.000Z` }
+            from: { $gte: `${dateInit}T08:00:00.000Z`, $lt: `${dateEnd}T23:59:59.000Z` }
         },{to: 1, from: 1, in: 1, out: 1, store: 1 })
     const counterPush = [];
     showDataCounter.map(counters => {
@@ -127,6 +128,42 @@ router.get("/data-counter/:dateInit/:dateEnd", async(req, res) => {
     }else{
         return res.status(400).json({ message: "Error, fechas en formato incorrecto" });
     }
+});
+
+router.get("/dataGroup", async(req, res) => {
+    let today = new Date();
+    let todayGuatemala = new Date();
+    todayGuatemala.toLocaleString('es-US', { timeZone: 'America/Guatemala' });
+    let todayFormat = moment(today).format('YYYY-MM-DD')
+    let showDataCounter = await Counter.find({
+        $or:[{'in':{$gt: 0}}, {'out':{$gt: 0}}],
+        from: { $gte: `${todayFormat}T08:00:00.000Z`, $lt: `${todayFormat}T23:59:59.000Z` }
+    },{to: 1, in: 1, out:1, store: 1 });
+    let tiendasEntradas =[];
+    let tiendasPasadas = [];
+    await showDataCounter.map((counters) => {
+        if(tiendasPasadas.includes(counters.store) ==  false){
+            tiendasEntradas[counters.store] =  {store:'', in:0, out:0, date:''};
+            tiendasPasadas.push(counters.store);
+        }
+        tiendasEntradas[counters.store].store = counters.store;
+        tiendasEntradas[counters.store].date = todayGuatemala;
+        tiendasEntradas[counters.store].in = tiendasEntradas[counters.store].in + counters.in;  
+        tiendasEntradas[counters.store].out = tiendasEntradas[counters.store].out + counters.out;
+    });
+   
+    tiendasPasadas.map(async(tiendas, position) =>{
+        const showCounter = {
+            date:tiendasEntradas[tiendas].date,
+            in: tiendasEntradas[tiendas].in,
+            out: tiendasEntradas[tiendas].out,
+            store: tiendasEntradas[tiendas].store
+        };
+        const insertData = CounterUnion(showCounter);
+        await insertData.save();
+    });
+    
+    return res.status(200).json({"Message":"Datos Ingresados"});
 });
 
 module.exports = router;

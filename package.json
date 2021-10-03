@@ -9,7 +9,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "union":"node union.js"
   },
   "keywords": [],
   "author": "",

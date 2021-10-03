@@ -58,7 +58,7 @@ router.post("/counter", async(req, res) => {
 
 router.get("/data-counter", async(req, res) => {
     
-    let showDataCounter = await Counter.find({ $or:[{'in':{$gt: 0}}, {'out':{$gt: 0}}]},{to: 1, from: 1, in: 1, out: 1, store: 1 });
+   /* let showDataCounter = await Counter.find({ $or:[{'in':{$gt: 0}}, {'out':{$gt: 0}}]},{to: 1, from: 1, in: 1, out: 1, store: 1 });
     const counterPush = [];
     showDataCounter.map(counters => {
 
@@ -127,7 +127,7 @@ router.get("/data-counter/:dateInit/:dateEnd", async(req, res) => {
     }
     }else{
         return res.status(400).json({ message: "Error, fechas en formato incorrecto" });
-    }
+    }*/
 });
 
 router.get("/dataGroup", async(req, res) => {

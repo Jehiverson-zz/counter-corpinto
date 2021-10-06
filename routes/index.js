@@ -51,7 +51,7 @@ router.post("/counter", async(req, res) => {
                         store: createCounter.store
                     };
                     const insertDataUnion = CounterUnion(showCounterUnion);
-                    //await insertDataUnion.save();
+                    await insertDataUnion.save();
                 }else{
                     let inPerson = showDataCounterUnion[0].in + createCounter.in;
                     let outPerson = showDataCounterUnion[0].out + createCounter.out;
@@ -61,7 +61,7 @@ router.post("/counter", async(req, res) => {
                         out: outPerson
                     }
 
-                    //await CounterUnion.updateOne(myquery, countPersonInfo);
+                    await CounterUnion.updateOne(myquery, countPersonInfo);
                 }
                 
                 console.log("Se guardo");

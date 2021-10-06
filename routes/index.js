@@ -46,7 +46,7 @@ router.post("/counter", async(req, res) => {
                 if(showDataCounterUnion.length <= 0){
                     console.log(1);
                     const showCounterUnion = {
-                        date:todayFormatUnion+"T18:20:59.000Z",
+                        date:todayFormatUnion+"T18:20:59.000+00:00",
                         in: createCounter.in,
                         out: createCounter.out,
                         store: createCounter.store

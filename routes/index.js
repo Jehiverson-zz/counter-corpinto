@@ -39,10 +39,10 @@ router.post("/counter", async(req, res) => {
                 await insertData.save();
                 let todayFormatUnion = moment(new Date(createCounter.from)).format('YYYY-MM-DD');
                 let showDataCounterUnion = await CounterUnion.find({
-                    date: { $gte: `${todayFormatUnion}T08:00:00.000Z`, $lt: `${todayFormatUnion}T23:59:59.000Z` },
+                    date: `${todayFormatUnion}T18:20:59.000+00:00`,
                     store: createCounter.store
                 }).limit(1);
-
+                console.log(showDataCounterUnion);
                 if(showDataCounterUnion.length <= 0){
                     const showCounterUnion = {
                         date:todayFormatUnion+"T18:20:59.000Z",
@@ -51,7 +51,7 @@ router.post("/counter", async(req, res) => {
                         store: createCounter.store
                     };
                     const insertDataUnion = CounterUnion(showCounterUnion);
-                    await insertDataUnion.save();
+                    //await insertDataUnion.save();
                 }else{
                     let inPerson = showDataCounterUnion[0].in + createCounter.in;
                     let outPerson = showDataCounterUnion[0].out + createCounter.out;
@@ -61,7 +61,7 @@ router.post("/counter", async(req, res) => {
                         out: outPerson
                     }
 
-                    await CounterUnion.updateOne(myquery, countPersonInfo);
+                    //await CounterUnion.updateOne(myquery, countPersonInfo);
                 }
                 
                 console.log("Se guardo");

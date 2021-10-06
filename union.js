@@ -11,15 +11,13 @@ const union = async (req, res) => {
     console.log("Entre");
     let today = new Date();
     let todayGuatemala = new Date();
-    console.log("Entre1");
+     console.log("Entre");
     todayGuatemala.toLocaleString('es-US', { timeZone: 'America/Guatemala' });
-    let todayFormat = moment(today).format('YYYY-MM-DD');
-    console.log("Entre1.5");
+    let todayFormat = moment(today).format('YYYY-MM-DD')
     let showDataCounter = await Counter.find({
         $or:[{'in':{$gt: 0}}, {'out':{$gt: 0}}],
         from: { $gte: `${todayFormat}T08:00:00.000Z`, $lt: `${todayFormat}T23:59:59.000Z` }
     },{to: 1, in: 1, out:1, store: 1 });
-    console.log("Entre3");
     let tiendasEntradas =[];
     let tiendasPasadas = [];
     console.log("Pase");

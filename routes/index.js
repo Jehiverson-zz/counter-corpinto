@@ -18,8 +18,6 @@ router.post("/counter", async(req, res) => {
         };
         
         createCounter.store = req.body.sensor.name;
-        console.log(req.body);
-        console.log(req.body.sensor.name,": Tienda que llego");
         req.body.data.measurements.map(async(measurement) =>{
     
             var toConvert = new Date(req.body.data.to);
@@ -34,18 +32,43 @@ router.post("/counter", async(req, res) => {
                 }else{
                     createCounter.out = item.count;
                 }
-               
             });
-            console.log(createCounter);
+           
             const insertData = Counter(createCounter);
             if(createCounter.in > 0 || createCounter.out > 0){
                 await insertData.save();
+                let todayFormatUnion = moment(new Date(createCounter.from)).format('YYYY-MM-DD');
+                let showDataCounterUnion = await CounterUnion.find({
+                    date: { $gte: `${todayFormatUnion}T08:00:00.000Z`, $lt: `${todayFormatUnion}T23:59:59.000Z` },
+                    store: createCounter.store
+                }).limit(1);
+
+                if(showDataCounterUnion.length <= 0){
+                    const showCounterUnion = {
+                        date:todayFormatUnion+"T18:20:59.000Z",
+                        in: createCounter.in,
+                        out: createCounter.out,
+                        store: createCounter.store
+                    };
+                    const insertDataUnion = CounterUnion(showCounterUnion);
+                    await insertDataUnion.save();
+                }else{
+                    let inPerson = showDataCounterUnion[0].in + createCounter.in;
+                    let outPerson = showDataCounterUnion[0].out + createCounter.out;
+                    let myquery = { _id: showDataCounterUnion[0].id };
+                    let countPersonInfo = {
+                        in: inPerson,
+                        out: outPerson
+                    }
+
+                    await CounterUnion.updateOne(myquery, countPersonInfo);
+                }
+                
                 console.log("Se guardo");
             }else{
                 console.log("No se guardo");
             }
         });
-
         return res.status(200).json({ message: "Exito" });
 
     } else {
@@ -58,24 +81,18 @@ router.post("/counter", async(req, res) => {
 
 router.get("/data-counter", async(req, res) => {
     
-   /* let showDataCounter = await Counter.find({ $or:[{'in':{$gt: 0}}, {'out':{$gt: 0}}]},{to: 1, from: 1, in: 1, out: 1, store: 1 });
+    let showDataCounter = await CounterUnion.find();
     const counterPush = [];
     showDataCounter.map(counters => {
 
         const showCounter = {
-            horaInicio: "",
-            horaFinal: "",
+            fecha: "",
             entrada: 0,
             salida: 0,
             tienda: ""
         };
 
-        var fromConvert = new Date(counters.from);
-        showCounter.horaInicio = fromConvert.toLocaleString('es-US', { timeZone: 'America/Guatemala' });
-
-        var toConvert = new Date(counters.to);
-        showCounter.horaFinal = toConvert.toLocaleString('es-US', { timeZone: 'America/Guatemala' });
-
+        showCounter.fecha = new Date(counters.date);
         showCounter.entrada = counters.in;
         showCounter.salida = counters.out;
         showCounter.tienda = counters.store;
@@ -127,31 +144,43 @@ router.get("/data-counter/:dateInit/:dateEnd", async(req, res) => {
     }
     }else{
         return res.status(400).json({ message: "Error, fechas en formato incorrecto" });
-    }*/
+    }
 });
 
 router.get("/dataGroup", async(req, res) => {
-    let today = new Date();
-    let todayGuatemala = new Date();
-    todayGuatemala.toLocaleString('es-US', { timeZone: 'America/Guatemala' });
-    let todayFormat = moment(today).format('YYYY-MM-DD')
+    //Dias
+    let today = '2021-10-05T18:20:59.000Z';
+    let tomorrow = '2021-10-06T10:20:59.000Z';
+    //Convert Date
+    let todayDate = new Date(today);
+    let todayGuatemalaDate = new Date(today);
+    let tomorrowDate = new Date(tomorrow);
+    //Guatemala
+    todayGuatemalaDate.toLocaleString('es-US', { timeZone: 'America/Guatemala' });
+    //Formate YYY-MM-DD
+    let todayFormat = moment(today).format('YYYY-MM-DD');
+    let tomorrowFormat = moment(tomorrowDate).format('YYYY-MM-DD');
+
+    //console.log("--------",todayFormat,tomorrowFormat, new Date(`${todayFormat}T05:59:00.000Z`).toLocaleString('es-US', { timeZone: 'America/Guatemala' }), new Date(`${tomorrowFormat}T05:59:00.000Z`).toLocaleString('es-US', { timeZone: 'America/Guatemala' }))
     let showDataCounter = await Counter.find({
         $or:[{'in':{$gt: 0}}, {'out':{$gt: 0}}],
-        from: { $gte: `${todayFormat}T08:00:00.000Z`, $lt: `${todayFormat}T23:59:59.000Z` }
-    },{to: 1, in: 1, out:1, store: 1 });
+        from: { $gte: `${todayFormat}T06:10:00.000Z`, $lt: `${tomorrowFormat}T05:59:00.000Z` }
+    },{from: 1, in: 1, out:1, store: 1 })
+
     let tiendasEntradas =[];
     let tiendasPasadas = [];
     await showDataCounter.map((counters) => {
-        if(tiendasPasadas.includes(counters.store) ==  false){
+        //console.log(counters.from, counters.from.toLocaleString('es-US', { timeZone: 'America/Guatemala' }), counters.in, counters.store);
+         if(tiendasPasadas.includes(counters.store) ==  false){
             tiendasEntradas[counters.store] =  {store:'', in:0, out:0, date:''};
             tiendasPasadas.push(counters.store);
         }
         tiendasEntradas[counters.store].store = counters.store;
-        tiendasEntradas[counters.store].date = todayGuatemala;
+        tiendasEntradas[counters.store].date = todayGuatemalaDate;
         tiendasEntradas[counters.store].in = tiendasEntradas[counters.store].in + counters.in;  
         tiendasEntradas[counters.store].out = tiendasEntradas[counters.store].out + counters.out;
     });
-   
+    //console.log(tiendasEntradas);
     tiendasPasadas.map(async(tiendas, position) =>{
         const showCounter = {
             date:tiendasEntradas[tiendas].date,
@@ -161,6 +190,7 @@ router.get("/dataGroup", async(req, res) => {
         };
         const insertData = CounterUnion(showCounter);
         await insertData.save();
+        console.log("Entra", showCounter);
     });
     
     return res.status(200).json({"Message":"Datos Ingresados"});

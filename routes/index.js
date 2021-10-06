@@ -44,6 +44,7 @@ router.post("/counter", async(req, res) => {
                 }).limit(1);
                 console.log(showDataCounterUnion);
                 if(showDataCounterUnion.length <= 0){
+                    console.log(1);
                     const showCounterUnion = {
                         date:todayFormatUnion+"T18:20:59.000Z",
                         in: createCounter.in,
@@ -53,6 +54,7 @@ router.post("/counter", async(req, res) => {
                     const insertDataUnion = CounterUnion(showCounterUnion);
                     await insertDataUnion.save();
                 }else{
+                    console.log(2);
                     let inPerson = showDataCounterUnion[0].in + createCounter.in;
                     let outPerson = showDataCounterUnion[0].out + createCounter.out;
                     let myquery = { _id: showDataCounterUnion[0].id };

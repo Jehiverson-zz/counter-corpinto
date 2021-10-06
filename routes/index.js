@@ -42,7 +42,7 @@ router.post("/counter", async(req, res) => {
                     date: `${todayFormatUnion}T18:20:59.000+00:00`,
                     store: createCounter.store
                 }).limit(1);
-                console.log(showDataCounterUnion);
+                //console.log(showDataCounterUnion);
                 if(showDataCounterUnion.length <= 0){
                     console.log(1);
                     const showCounterUnion = {
@@ -112,7 +112,7 @@ router.get("/data-counter/:dateInit/:dateEnd", async(req, res) => {
     if(new Date(dateInit) <= new Date(dateEnd)){
     let showDataCounter = await Counter.find({ 
             $or:[{'in':{$gt: 0}}, {'out':{$gt: 0}}], 
-            from: { $gte: `${dateInit}T08:00:00.000Z`, $lt: `${dateEnd}T23:59:59.000Z` }
+            from: { $gte: `${dateInit}T06:10:00.000Z`, $lt: `${dateEnd}T05:59:00.000Z` }
         },{to: 1, from: 1, in: 1, out: 1, store: 1 })
     const counterPush = [];
     showDataCounter.map(counters => {
